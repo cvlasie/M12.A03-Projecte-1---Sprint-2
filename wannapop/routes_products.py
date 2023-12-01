@@ -1,7 +1,7 @@
 from flask import Blueprint, render_template, redirect, url_for, flash, abort
 from flask_login import current_user
 from werkzeug.utils import secure_filename
-from .models import Product, Category, Status
+from .models import Product, Category, Status, BannedProduct
 from .forms import ProductForm, DeleteForm
 from .helper_role import Action, perm_required
 from . import db_manager as db
@@ -21,10 +21,10 @@ def templates_processor():
 @products_bp.route('/products/list')
 @perm_required(Action.products_list)
 def product_list():
-    # select amb join que retorna una llista de resultats
-    products_with_category = db.session.query(Product, Category).join(Category).order_by(Product.id.asc()).all()
+    # Filtrar els productes que no estan prohibits
+    products_with_category = db.session.query(Product, Category).join(Category).outerjoin(BannedProduct, Product.id == BannedProduct.product_id).filter(BannedProduct.id == None).order_by(Product.id.asc()).all()
     
-    return render_template('products/list.html', products_with_category = products_with_category)
+    return render_template('products/list.html', products_with_category=products_with_category)
 
 @products_bp.route('/products/create', methods = ['POST', 'GET'])
 @perm_required(Action.products_create)
@@ -66,14 +66,14 @@ def product_create():
 @products_bp.route('/products/read/<int:product_id>')
 @perm_required(Action.products_read)
 def product_read(product_id):
-    # select amb join i 1 resultat
-    result = db.session.query(Product, Category, Status).join(Category).join(Status).filter(Product.id == product_id).one_or_none()
+    # Obtenir producte i informació de prohibició
+    result = db.session.query(Product, Category, Status, BannedProduct).join(Category).join(Status).outerjoin(BannedProduct, Product.id == BannedProduct.product_id).filter(Product.id == product_id).one_or_none()
 
     if not result:
         abort(404)
 
-    (product, category, status) = result
-    return render_template('products/read.html', product = product, category = category, status = status)
+    product, category, status, banned_info = result
+    return render_template('products/read.html', product=product, category=category, status=status, banned_info=banned_info)
 
 @products_bp.route('/products/update/<int:product_id>',methods = ['POST', 'GET'])
 @perm_required(Action.products_update)

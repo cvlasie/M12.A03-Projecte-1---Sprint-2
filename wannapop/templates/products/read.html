@@ -5,12 +5,19 @@ Producte {{ product.id }}
 {% endblock %}
 
 {% block content %}
+
+{% if banned_info %}
+  <div class="alert alert-danger">
+    Aquest producte està prohibit per la següent raó: {{ banned_info.reason }}
+  </div>
+{% endif %}
+
 <ul>
     <li>Nom: {{ product.title }}</li>
     <li>Descripció: {{ product.description }}</li>
     <li>Preu: {{ product.price }}</li>
-    <li>Categoria: {{ category.name }} </li>
-    <li>Estat: {{ status.name }} </li>
+    <li>Categoria: {{ category.name }}</li>
+    <li>Estat: {{ status.name }}</li>
 </ul>
 <p><img src="/static/products/{{ product.photo }}" alt="{{ product.title }}" /></p>
 
