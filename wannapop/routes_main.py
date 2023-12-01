@@ -3,6 +3,7 @@ from flask_login import current_user, login_required, logout_user
 from .forms import ProfileForm
 from . import db_manager as db, mail_manager
 import secrets
+from .models import BlockedUser
 
 # Blueprint
 main_bp = Blueprint("main_bp", __name__)
@@ -18,6 +19,12 @@ def init():
 @login_required
 def profile():
     form = ProfileForm()
+    is_blocked = db.session.query(BlockedUser).filter_by(user_id=current_user.id).first()
+
+    if is_blocked:
+        flash("Tu cuenta está bloqueada. Razón: " + is_blocked.message, "danger")
+        return redirect(url_for('main_bp.init'))
+
     if form.validate_on_submit():
         something_change = False
         new_email = form.email.data
@@ -60,7 +67,7 @@ def profile():
         form.name.data = current_user.name
         form.email.data = current_user.email    
 
-        return render_template('profile.html', form = form)
+        return render_template('profile.html', form=form)
 
 @main_bp.app_errorhandler(403)
 def forbidden_access(e):

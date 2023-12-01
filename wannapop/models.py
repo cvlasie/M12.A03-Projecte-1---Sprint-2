@@ -21,7 +21,6 @@ class User(UserMixin, db.Model):
     
     @hybrid_property
     def password(self):
-        # https://stackoverflow.com/a/31915355
         return ""
     
     @password.setter
@@ -43,7 +42,7 @@ class User(UserMixin, db.Model):
     def is_wanner(self):
         return self.role == "wanner"
 
-    def is_action_allowed_to_product(self, action, product = None):
+    def is_action_allowed_to_product(self, action, product=None):
         from .helper_role import _permissions, Action
 
         current_permissions = _permissions[self.role]
@@ -53,20 +52,21 @@ class User(UserMixin, db.Model):
         if not action in current_permissions:
             return False
         
-        # Un usuari wanner sols pot modificar el seu propi producte
-        if (action == Action.products_update and self.is_wanner()):
+        if action == Action.products_update and self.is_wanner():
             if not product:
                 return False
             return self.id == product.seller_id
         
-        # Un usuari wanner sols pot eliminar el seu propi producte
-        if (action == Action.products_delete and self.is_wanner()):
+        if action == Action.products_delete and self.is_wanner():
             if not product:
                 return False
             return self.id == product.seller_id
         
-        # si hem arribat fins aquí, l'usuari té permisos
         return True
+
+    def is_blocked(self):
+        blocked_user = BlockedUser.query.filter_by(user_id=self.id).first()
+        return blocked_user is not None
 
 class Product(db.Model):
     __tablename__ = "products"
@@ -92,3 +92,10 @@ class Status(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String, nullable=False)
     slug = db.Column(db.String, nullable=False)
+
+class BlockedUser(db.Model):
+    __tablename__ = "blocked_users"
+    id = db.Column(db.Integer, primary_key=True)
+    user_id = db.Column(db.Integer, db.ForeignKey("users.id"), nullable=False)
+    message = db.Column(db.String, nullable=False)
+    created = db.Column(db.DateTime, server_default=func.now())

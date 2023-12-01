@@ -1,0 +1,18 @@
+{% extends 'layouts/_base.html' %}
+
+{% block title %}
+Ban_Users
+{% endblock %}
+
+{% block content %}
+{% if blocked_user %}
+    <h2>Prohibir Usuari: {{ blocked_user.name }}</h2>
+    <form method="POST">
+        <label for="reason">Raó per la Prohibició:</label>
+        <input type="text" name="reason" id="reason" required>
+        <input type="submit" value="Prohibir Usuari">
+    </form>
+{% else %}
+    <p>No se proporcionó un usuario bloqueado válido.</p>
+{% endif %}
+{% endblock %}

@@ -33,8 +33,16 @@ Nou producte
       {{ form.status_id(class_="form-control") }}
       {{ form.status_id.label }}
    </div>
-   <a class="btn btn-outline-dark btn-xl" href="/products/list">&#x3c;&#x3c; Tornar al llistat</a>
-   {{ form.submit(value="CREAR", class_="btn btn-primary btn-xl") }}
+
+   {% if is_blocked %}
+      <div class="alert alert-danger" role="alert">
+        No puedes crear nuevos productos porque tu cuenta está bloqueada. Razón: {{ is_blocked.message }}
+      </div>
+   {% else %}
+      <a class="btn btn-outline-dark btn-xl" href="/products/list">&#x3c;&#x3c; Tornar al llistat</a>
+      {{ form.submit(value="CREAR", class_="btn btn-primary btn-xl") }}
+   {% endif %}
+
    {{ render_errors(form) }}
 </form>
 {% endblock %}

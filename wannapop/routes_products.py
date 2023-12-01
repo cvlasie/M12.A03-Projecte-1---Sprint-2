@@ -1,7 +1,7 @@
 from flask import Blueprint, render_template, redirect, url_for, flash, abort
 from flask_login import current_user
 from werkzeug.utils import secure_filename
-from .models import Product, Category, Status
+from .models import Product, Category, Status, BlockedUser
 from .forms import ProductForm, DeleteForm
 from .helper_role import Action, perm_required
 from . import db_manager as db
@@ -26,9 +26,13 @@ def product_list():
     
     return render_template('products/list.html', products_with_category = products_with_category)
 
-@products_bp.route('/products/create', methods = ['POST', 'GET'])
+@products_bp.route('/products/create', methods=['POST', 'GET'])
 @perm_required(Action.products_create)
-def product_create(): 
+def product_create():
+    is_blocked = db.session.query(BlockedUser).filter_by(user_id=current_user.id).first()
+    if is_blocked:
+        flash("No puedes crear nuevos productos porque tu cuenta está bloqueada. Razón: " + is_blocked.message, "danger")
+        return redirect(url_for('products_bp.product_list'))
 
     # selects que retornen una llista de resultats
     categories = db.session.query(Category).order_by(Category.id.asc()).all()
@@ -61,7 +65,7 @@ def product_create():
         flash("Nou producte creat", "success")
         return redirect(url_for('products_bp.product_list'))
     else: # GET
-        return render_template('products/create.html', form = form)
+        return render_template('products/create.html', form=form)
 
 @products_bp.route('/products/read/<int:product_id>')
 @perm_required(Action.products_read)
