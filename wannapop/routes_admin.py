@@ -26,15 +26,16 @@ def ban_product(product_id):
     product = Product.query.get_or_404(product_id)
     banned_product = BannedProduct.query.filter_by(product_id=product_id).first()
 
+    if banned_product:
+        flash('Aquest producte ja està prohibit.', 'error')
+        return redirect(url_for('admin_bp.admin_index'))
+        
     if request.method == 'POST':
         reason = request.form.get('reason')
         if not reason:
             flash('Has d\'introduir una raó per a la prohibició.', 'error')
             return redirect(url_for('admin_bp.admin_index'))
 
-        if banned_product:
-            flash('Aquest producte ja està prohibit.', 'error')
-            return redirect(url_for('admin_bp.admin_index'))
 
         new_banned_product = BannedProduct(product_id=product_id, reason=reason)
         db.session.add(new_banned_product)
@@ -51,11 +52,11 @@ def ban_product(product_id):
 def unban_product(product_id):
     form = UnbanForm()
     banned_product = BannedProduct.query.filter_by(product_id=product_id).first()
-
+    if not banned_product:
+        flash('Aquest producte no està prohibit.', 'error')
+        return redirect(url_for('admin_bp.admin_index'))
     if request.method == 'POST' and form.validate_on_submit():
-        if not banned_product:
-            flash('Aquest producte no està prohibit.', 'error')
-            return redirect(url_for('admin_bp.admin_index'))
+        
 
         db.session.delete(banned_product)
         db.session.commit()
