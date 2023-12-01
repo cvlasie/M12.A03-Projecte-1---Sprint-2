@@ -26,17 +26,6 @@ Per desactivar l'entorn:
 
     deactivate
 
-### Instalar
-
-pip install 
-Flask-Login 
-pip install Python-dotenv 
-pip install email-validator 
-pip install flask-principal 
-pip install flask_wtf 
-pip install sqlalchemyseed 
-pip install sqlalchemy-seed
-
 ### Base de dades
 
 Crea una base de dades SQLite a partir de l'script [0_tables.sql](./sqlite/0_tables.sql). Tens una d'exemple creada amb les dades del fitxer [1_mock_data.sql](./sqlite/1_mock_data.sql). Hi ha tres usuaris de prova (un `admin` i dos `wanner`) i tots tres tenen com a contrasenya `patata`.
