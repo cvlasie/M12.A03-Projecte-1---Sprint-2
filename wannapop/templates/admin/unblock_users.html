@@ -1,0 +1,20 @@
+{% extends 'layouts/_base.html' %}
+
+{% block title %}
+Desbloquear Usuario
+{% endblock %}
+
+{% block content %}
+<div class="container mt-5">
+  {% if blocked_user %}
+    <h2 class="mb-4">Desbloquear Usuario: {{ blocked_user.name }}</h2>
+    <form method="POST">
+      <button type="submit" class="btn btn-success">Desbloquear Usuario</button>
+    </form>
+  {% else %}
+    <div class="alert alert-danger" role="alert">
+      No se proporcionó un usuario bloqueado válido.
+    </div>
+  {% endif %}
+</div>
+{% endblock %}

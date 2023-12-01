@@ -20,6 +20,13 @@ Profile
        {{ form.password(class_="form-control", placeholder_="La mateixa contrasenya") }}
        {{ form.password.label }}
     </div>
+
+    {% if is_blocked %}
+      <div class="alert alert-danger" role="alert">
+        Tu cuenta está bloqueada. Razón: {{ is_blocked.message }}
+      </div>
+    {% endif %}
+
     {{ form.submit(value="ACTUALITZA",class_="btn btn-primary btn-xl") }}
     {{ render_errors(form) }}
  </form>

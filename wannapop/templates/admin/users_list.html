@@ -12,6 +12,7 @@ Usuaris
 			<th>NOM</th>
 			<th>EMAIL</th>
 			<th>ROL</th>
+			<th>ACCIONS</th>
 		</tr>
 	</thead>
 	<tbody>
@@ -21,6 +22,17 @@ Usuaris
             <td>{{ user.name }}</td>
             <td>{{ user.email }}</td>
             <td>{{ user.role }}</td>
+            <td>
+                {% if user.is_blocked() %}
+                    <form method="POST" action="{{ url_for('admin_bp.unblock_user', user_id=user.id) }}" style="display: inline;">
+                        <button type="submit" class="btn btn-danger btn-sm" onclick="return confirm('¿Estás seguro de que deseas desbloquear a este usuario?')">Desbloquear</button>
+                    </form>
+                {% else %}
+                    <form method="POST" action="{{ url_for('admin_bp.block_user', user_id=user.id) }}" style="display: inline;">
+                        <button type="submit" class="btn btn-warning btn-sm" onclick="return confirm('¿Estás seguro de que deseas bloquear a este usuario?')">Bloquear</button>
+                    </form>
+                {% endif %}
+            </td>
 		</tr>
 		{% endfor %}
 	</tbody>
