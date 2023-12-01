@@ -30,7 +30,7 @@ Per desactivar l'entorn:
 
 Teniu que instalar tot aixo:
 
-    pip install git https://github.com/pallets-eco/flask-debugtoolbar.git@master
+    pip install git+https://github.com/pallets-eco/flask-debugtoolbar.git@master
     pip install packaging
 
 ### Base de dades

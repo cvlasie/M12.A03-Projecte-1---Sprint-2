@@ -80,6 +80,7 @@ class Product(db.Model):
     seller_id = db.Column(db.Integer, db.ForeignKey("users.id"), nullable=False)
     created = db.Column(db.DateTime, server_default=func.now())
     updated = db.Column(db.DateTime, server_default=func.now(), onupdate=func.now())
+    banned_product = db.relationship('BannedProduct', backref='banned_product_of', lazy=True)
 
 class Category(db.Model):
     __tablename__ = "categories"
@@ -92,3 +93,12 @@ class Status(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String, nullable=False)
     slug = db.Column(db.String, nullable=False)
+
+class BannedProduct(db.Model):
+    __tablename__ = 'banned_products'
+    id = db.Column(db.Integer, primary_key=True)
+    product_id = db.Column(db.Integer, db.ForeignKey('products.id'), nullable=False)
+    reason = db.Column(db.String, nullable=False)
+    created = db.Column(db.DateTime, default=func.now())
+
+    product = db.relationship('Product', backref=db.backref('ban_info', uselist=False))

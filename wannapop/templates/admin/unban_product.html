@@ -1,0 +1,28 @@
+{% extends 'layouts/_base.html' %}
+
+{% block title %}
+Unban_Products
+{% endblock %}
+
+{% from "./partials/_formhelpers.html" import render_errors %}
+{% block content %}
+
+<div class="max-w-md mx-auto mt-8">
+    <h3 class="text-2xl font-semibold mb-4">Eliminar Prohibició del Producte</h3>
+
+    <p>Estàs segur/a que vols eliminar la prohibició del producte amb ID {{ product_id }}?</p>
+
+    <form action="/admin/products/{{ product_id }}/unban" method="POST">
+        {{ form.csrf_token() }}
+
+        <div>
+            <button type="submit" class="bg-red-500 text-white rounded-lg py-2 px-4 hover:bg-red-600">Eliminar Prohibició</button>
+        </div>
+
+        {{ render_errors(form) }}
+    </form>
+
+    <a href="/admin" class="mt-4 block text-blue-500 hover:underline">Tornar a l'administració</a>
+</div>
+
+{% endblock %}

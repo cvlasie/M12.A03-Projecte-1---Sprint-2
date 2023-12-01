@@ -1,0 +1,14 @@
+{% extends 'layouts/_base.html' %}
+
+{% block title %}
+Ban_Products
+{% endblock %}
+
+{% block content %}
+<h2>Prohibir Producte: {{ product.title }}</h2>
+<form method="POST">
+    <label for="reason">Raó per la Prohibició:</label>
+    <input type="text" name="reason" id="reason" required>
+    <input type="submit" value="Prohibir Producte">
+</form>
+{% endblock %}

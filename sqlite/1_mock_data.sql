@@ -22,3 +22,4 @@ INSERT INTO products (id, title, description, photo, price, category_id, status_
 (2, 'Samarreta', 'Una samarreta de cotó de color blau.', 'no_image.png', 19.99, 2, 1, 3),
 (3, 'Ninot de peluix', 'Un ninot de peluix suau.', 'no_image.png', 9.99, 3, 1, 4);
 UPDATE SQLITE_SEQUENCE SET seq = 3 WHERE name = 'products';
+
