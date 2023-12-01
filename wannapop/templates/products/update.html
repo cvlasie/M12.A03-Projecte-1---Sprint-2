@@ -1,0 +1,40 @@
+{% extends 'layouts/_base.html' %}
+{% from "partials/_formhelpers.html" import render_errors %}
+
+{% block title %}
+Producte {{ product_id }}
+{% endblock %}
+
+{% block content %}
+<h3>Introdueix les dades</h3>
+<form action="/products/update/{{ product_id }}" method="POST" enctype="multipart/form-data">
+   {{ form.csrf_token }}
+   <div class="form-floating mb-3">
+      {{ form.title(class_="form-control") }}
+      {{ form.title.label }}
+   </div>
+   <div class="form-floating mb-3">
+      {{ form.description(class_="form-control") }}
+      {{ form.description.label }}
+   </div>
+   <div class="form-floating mb-3">
+      {{ form.photo_file(class_="form-control") }}
+      {{ form.photo_file.label }}
+   </div>
+   <div class="form-floating mb-3">
+      {{ form.price(class_="form-control") }}
+      {{ form.price.label }}
+   </div>
+   <div class="form-floating mb-3">
+      {{ form.category_id(class_="form-control") }}
+      {{ form.category_id.label }}
+   </div>
+   <div class="form-floating mb-3">
+      {{ form.status_id(class_="form-control") }}
+      {{ form.status_id.label }}
+   </div>
+   <a class="btn btn-outline-dark btn-xl" href="/products/list">&#x3c;&#x3c; Tornar al llistat</a>
+   {{ form.submit(value="MODIFICAR", class_="btn btn-primary btn-xl") }}
+   {{ render_errors(form) }}
+</form>
+{% endblock %}
