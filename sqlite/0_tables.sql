@@ -49,10 +49,10 @@ CREATE TABLE banned_products (
     FOREIGN KEY(product_id) REFERENCES products(id)
 );
 
-CREATE TABLE blocked_users (
-    id INTEGER PRIMARY KEY,
-    user_id INTEGER NOT NULL,
-    message TEXT NOT NULL,
-    created DATETIME DEFAULT CURRENT_TIMESTAMP,
-    FOREIGN KEY (user_id) REFERENCES users (id)
+CREATE TABLE "blocked_users" (
+	"id" INTEGER PRIMARY KEY AUTOINCREMENT,
+	"user_id" INTEGER,
+	"message" TEXT,
+	"created" DATETIME DEFAULT CURRENT_TIMESTAMP,
+	FOREIGN KEY("user_id") REFERENCES "users"("id")
 );
