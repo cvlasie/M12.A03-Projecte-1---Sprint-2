@@ -30,8 +30,10 @@ def product_list():
 @perm_required(Action.products_create)
 def product_create():
     is_blocked = db.session.query(BlockedUser).filter_by(user_id=current_user.id).first()
+    block_message = is_blocked.message if is_blocked and is_blocked.message is not None else "Sin mensaje"
+
     if is_blocked:
-        flash("No puedes crear nuevos productos porque tu cuenta está bloqueada. Razón: " + is_blocked.message, "danger")
+        flash("No puedes crear nuevos productos porque tu cuenta está bloqueada. Razón: " + block_message, "danger")
         return redirect(url_for('products_bp.product_list'))
 
     # selects que retornen una llista de resultats

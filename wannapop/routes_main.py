@@ -22,7 +22,8 @@ def profile():
     is_blocked = db.session.query(BlockedUser).filter_by(user_id=current_user.id).first()
 
     if is_blocked:
-        flash("Tu cuenta está bloqueada. Razón: " + is_blocked.message, "danger")
+        block_message = is_blocked.message if is_blocked.message is not None else "Sin mensaje"
+        flash(f"Tu cuenta está bloqueada. Razón: {block_message}", "danger")
         return redirect(url_for('main_bp.init'))
 
     if form.validate_on_submit():
